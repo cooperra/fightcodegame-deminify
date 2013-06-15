@@ -471,7 +471,9 @@ FightCodeEngine.create_fight = function () {
 			}
 		};
 		r.prototype.rollbackAfterCollision = function () {
-			this.previousPosition && this.rectangle.setPosition(this.previousPosition.x, this.previousPosition.y);
+			if (this.previousPosition) {
+				this.rectangle.setPosition(this.previousPosition.x, this.previousPosition.y);
+			}
 			if (this.previousAngle) return this.rectangle.setAngle(this.previousAngle)
 		};
 		r.prototype.cannonTotalAngle = function () {
@@ -619,7 +621,8 @@ FightCodeEngine.create_fight = function () {
 				n = u[s];
 				t = n.robot.rectangle;
 				if (t) {
-					n.rectangle.setPosition(t.position.x, t.position.y), a.push(n.rectangle.setAngle(t.angle));
+					n.rectangle.setPosition(t.position.x, t.position.y);
+					a.push(n.rectangle.setAngle(t.angle));
 				} else {
 					r = Math.floor(this.randomFunc() * this.arena.rectangle.dimension.width);
 					i = Math.floor(this.randomFunc() * this.arena.rectangle.dimension.height);

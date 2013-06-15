@@ -739,7 +739,13 @@ FightCodeEngine.create_fight = function () {
 					continue;
 				if (!(o instanceof c))
 					continue;
-				a.intersects(o.rectangle) && (r = h.subtract(o.rectangle.position, e.rectangle.position).module(), r < i && (s = o, i = r))
+				if (a.intersects(o.rectangle)) {
+					r = h.subtract(o.rectangle.position, e.rectangle.position).module();
+					if (r < i) {
+						s = o;
+						i = r;
+					}
+				}
 			}
 			s && !s.isInvisible && (
 				e.preventScan()

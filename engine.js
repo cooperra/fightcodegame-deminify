@@ -502,9 +502,17 @@ FightCodeEngine.create_fight = function () {
 				item = this.queue.shift()
 			}
 			if (!item) return;
-			"count" in item && (item.started = true, item.count--, item.count > 0 && this.queue.unshift(item));
+			if ("count" in item) {
+				item.started = true;
+				item.count--;
+				if (item.count > 0) {
+					this.queue.unshift(item);
+				}
+			}
 			dir = 1;
-			item.direction && item.direction < 0 && (dir = -1);
+			if (item.direction && item.direction < 0) {
+				dir = -1;
+			}
 			this.previousPosition = null;
 			this.previousAngle = null;
 			this.previousCannonAngle = null;

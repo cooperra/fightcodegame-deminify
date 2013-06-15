@@ -747,19 +747,19 @@ FightCodeEngine.create_fight = function () {
 					}
 				}
 			}
-			s && !s.isInvisible && (
-				e.preventScan()
-				t.ignore("onScannedRobot")
+			if (s && !s.isInvisible) {
+				e.preventScan();
+				t.ignore("onScannedRobot");
 				this.safeCall(e.robot.instance, "onScannedRobot", {
 					robot: t,
 					scannedRobot: this.basicEnemyInfo(s)
-				}),
-				t.listen("onScannedRobot"),
+				});
+				t.listen("onScannedRobot");
 				this.pushEventToLog({
 					type: "onScannedRobot",
 					id: e.id
-				})
-			);
+				});
+			}
 			return t;
 		};
 		e.prototype.basicEnemyInfo = function (e) {

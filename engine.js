@@ -100,7 +100,7 @@ FightCodeEngine.create_fight = function () {
 					action: "move",
 					direction: t,
 					count: Math.abs(e) / o
-				}), !0
+				}), true
 			};
 			this.ahead = function (e) {
 				return this.move(e, 1)
@@ -250,12 +250,12 @@ FightCodeEngine.create_fight = function () {
 		e.prototype.containingCollisionAngle = function (e) {
 			var t;
 			t = this.minRadius;
-			return this.position.x - t <= e.upperLeft.x ? 270 : this.position.x + t >= e.lowerRight.x ? 90 : this.position.y - t <= e.upperLeft.y ? 360 : this.position.y + t >= e.lowerRight.y ? 180 : !1;
+			return this.position.x - t <= e.upperLeft.x ? 270 : this.position.x + t >= e.lowerRight.x ? 90 : this.position.y - t <= e.upperLeft.y ? 360 : this.position.y + t >= e.lowerRight.y ? 180 : false;
 		};
 		e.prototype.intersects = function (e) {
 			var t, n, r, i, s;
 			r = h.subtract(this.position, e.position).module();
-			if (r > this.radius + e.radius) return !1;
+			if (r > this.radius + e.radius) return false;
 			n = [
 				h.subtract(this.upperRight, this.upperLeft),
 				h.subtract(this.upperRight, this.lowerRight),
@@ -264,9 +264,9 @@ FightCodeEngine.create_fight = function () {
 			];
 			for (i = 0, s = n.length; i < s; i++) {
 				t = n[i];
-				if (!this.isAxisCollision(e, t)) return !1
+				if (!this.isAxisCollision(e, t)) return false
 			}
-			return !0
+			return true
 		};
 		e.prototype.isAxisCollision = function (e, t) {
 			var n, r, i, s, o, u;
@@ -286,7 +286,7 @@ FightCodeEngine.create_fight = function () {
 			n = Math.max.apply(Math, o);
 			s = Math.min.apply(Math, u);
 			r = Math.max.apply(Math, u);
-			return i <= r && n >= r ? !0 : s <= n && r >= n ? !0 : !1;
+			return i <= r && n >= r ? true : s <= n && r >= n ? true : false;
 		};
 		e.prototype.generateScalar = function (e, t) {
 			var n;
@@ -300,7 +300,7 @@ FightCodeEngine.create_fight = function () {
 			this.id = "element" + c.id++, this.rectangle = new f
 		}
 		return e.id = 1, e.prototype.isAlive = function () {
-			return !0
+			return true
 		}, e
 	}();
 	p = function (e) {
@@ -325,11 +325,11 @@ FightCodeEngine.create_fight = function () {
 			this.rectangle.setDimension(2, 2);
 			this.speed = 2;
 			this.strength = 10;
-			this.running = !0;
+			this.running = true;
 		}
 		__extends(t, e);
 		t.prototype.isIdle = function () {
-			return !1
+			return false
 		};
 		t.prototype.isAlive = function () {
 			return this.running
@@ -340,7 +340,7 @@ FightCodeEngine.create_fight = function () {
 			return null;
 		};
 		t.prototype.destroy = function () {
-			return this.running = !1
+			return this.running = false
 		};
 		t.prototype.rollbackAfterCollision = function () {
 			if (this.previousPosition) return this.rectangle.setPosition(this.previousPosition.x, this.previousPosition.y)
@@ -375,7 +375,7 @@ FightCodeEngine.create_fight = function () {
 			this.friendsKilled = 0;
 			this.ignoredEvents = {};
 			this.accidentalCollisions = {};
-			this.isInvisible = !1;
+			this.isInvisible = false;
 		}
 		__extends(r, t);
 		r.deathOrder = 1;
@@ -397,13 +397,13 @@ FightCodeEngine.create_fight = function () {
 			return e;
 		};
 		r.prototype.disappear = function () {
-			this.isInvisible = !0, this.pushEventToLog({
+			this.isInvisible = true, this.pushEventToLog({
 				type: "beginInvisibility",
 				id: this.id
 			})
 		};
 		r.prototype.decInvisibleRounds = function () {
-			this._invisibleRounds--, this._invisibleRounds < 0 && (this.isInvisible = !1, this.pushEventToLog({
+			this._invisibleRounds--, this._invisibleRounds < 0 && (this.isInvisible = false, this.pushEventToLog({
 				type: "endInvisibility",
 				id: this.id
 			}))
@@ -434,7 +434,7 @@ FightCodeEngine.create_fight = function () {
 			return e;
 		};
 		r.prototype.addAccidentalCollision = function (e) {
-			return this.accidentalCollisions[e.id] = !0
+			return this.accidentalCollisions[e.id] = true
 		};
 		r.prototype.isClone = function () {
 			return !!this.parentStatus
@@ -479,11 +479,11 @@ FightCodeEngine.create_fight = function () {
 			var t, r, i, s, u;
 			this.gunCoolDownTime > 0 && this.gunCoolDownTime--;
 			i = this.queue.shift();
-			u = !1;
+			u = false;
 			while (i) {
 				switch (i.action) {
 				case "ignore":
-					this.ignoredEvents[i.eventName] = !0;
+					this.ignoredEvents[i.eventName] = true;
 					break;
 				case "listen":
 					delete this.ignoredEvents[i.eventName];
@@ -496,13 +496,13 @@ FightCodeEngine.create_fight = function () {
 					});
 					break;
 				default:
-					u = !0
+					u = true
 				}
 				if (u) break;
 				i = this.queue.shift()
 			}
 			if (!i) return;
-			"count" in i && (i.started = !0, i.count--, i.count > 0 && this.queue.unshift(i));
+			"count" in i && (i.started = true, i.count--, i.count > 0 && this.queue.unshift(i));
 			r = 1;
 			i.direction && i.direction < 0 && (r = -1);
 			this.previousPosition = null;
@@ -623,14 +623,14 @@ FightCodeEngine.create_fight = function () {
 		};
 		e.prototype.intersectsAnything = function (e) {
 			var t, n, r, i;
-			if (e.rectangle.containingCollisionAngle(this.arena.rectangle)) return !0;
+			if (e.rectangle.containingCollisionAngle(this.arena.rectangle)) return true;
 			i = this.robotsStatus;
 			for (n = 0, r = i.length; n < r; n++) {
 				t = i[n];
 				if (t === e || !t.isAlive()) continue;
-				if (e.rectangle.intersects(t.rectangle)) return !0
+				if (e.rectangle.intersects(t.rectangle)) return true
 			}
-			return !1
+			return false
 		};
 		e.prototype.findEmptyPosition = function (e) {
 			var t, n, r, i, s, o, u, a, f, l, c, h, p, d;
@@ -649,7 +649,7 @@ FightCodeEngine.create_fight = function () {
 						return e
 				}
 			}
-			return !1
+			return false
 		};
 		e.prototype.checkCollision = function (e) {
 			var t, r, i, s, o, u, a, f, p, v, m, g, y, b, w;
@@ -700,7 +700,7 @@ FightCodeEngine.create_fight = function () {
 						robot: r,
 						bearing: i,
 						collidedRobot: this.basicEnemyInfo(a),
-						myFault: !1
+						myFault: false
 					}), r.listen(o)))
 			}
 			return r
@@ -783,7 +783,7 @@ FightCodeEngine.create_fight = function () {
 						id: a.id,
 						name: a instanceof c ? a.robot.name : "bullet",
 						color: a instanceof c ? a.robot.color : null,
-						isClone: a instanceof c ? a.isClone() : !1,
+						isClone: a instanceof c ? a.isClone() : false,
 						position: {
 							x: a.rectangle.position.x,
 							y: a.rectangle.position.y

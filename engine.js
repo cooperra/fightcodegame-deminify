@@ -476,22 +476,22 @@ FightCodeEngine.create_fight = function () {
 			if (this.queue.length > 0 && this.queue[0].started) return this.queue.shift()
 		};
 		r.prototype.runItem = function () {
-			var t, r, i, s, u;
+			var t, r, item, s, u;
 			this.gunCoolDownTime > 0 && this.gunCoolDownTime--;
-			i = this.queue.shift();
+			item = this.queue.shift();
 			u = false;
-			while (i) {
-				switch (i.action) {
+			while (item) {
+				switch (item.action) {
 				case "ignore":
-					this.ignoredEvents[i.eventName] = true;
+					this.ignoredEvents[item.eventName] = true;
 					break;
 				case "listen":
-					delete this.ignoredEvents[i.eventName];
+					delete this.ignoredEvents[item.eventName];
 					break;
 				case "log":
 					this.pushEventToLog({
 						type: "log",
-						messages: i.messages.join("\n"),
+						messages: item.messages.join("\n"),
 						id: this.id
 					});
 					break;
@@ -499,16 +499,16 @@ FightCodeEngine.create_fight = function () {
 					u = true
 				}
 				if (u) break;
-				i = this.queue.shift()
+				item = this.queue.shift()
 			}
-			if (!i) return;
-			"count" in i && (i.started = true, i.count--, i.count > 0 && this.queue.unshift(i));
+			if (!item) return;
+			"count" in item && (item.started = true, item.count--, item.count > 0 && this.queue.unshift(item));
 			r = 1;
-			i.direction && i.direction < 0 && (r = -1);
+			item.direction && item.direction < 0 && (r = -1);
 			this.previousPosition = null;
 			this.previousAngle = null;
 			this.previousCannonAngle = null;
-			switch (i.action) {
+			switch (item.action) {
 			case "move":
 				s = this.rectangle.angle * Math.PI / 180;
 				this.previousPosition = new h(this.rectangle.position);
@@ -538,7 +538,7 @@ FightCodeEngine.create_fight = function () {
 				this.availableDisappears--;
 				return this.disappear();
 			case "notify":
-				i.callback && i.callback()
+				item.callback && item.callback()
 			}
 			return null
 		};

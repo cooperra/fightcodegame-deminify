@@ -879,7 +879,9 @@ FightCodeEngine.create_fight = function () {
 			});
 			o = s.sort(function (e, t) {
 				var n, r;
-				return n = e.deathIdx ? e.deathIdx : e.life * 1e3, r = t.deathIdx ? t.deathIdx : t.life * 1e3, r - n
+				n = e.deathIdx ? e.deathIdx : e.life * 1e3;
+				r = t.deathIdx ? t.deathIdx : t.life * 1e3;
+				return r - n
 			});
 			for (p = 0, m = o.length; p < m; p++) {
 				i = o[p];

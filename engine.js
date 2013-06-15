@@ -551,7 +551,11 @@ FightCodeEngine.create_fight = function () {
 			return null
 		};
 		r.prototype.updateQueue = function (e) {
-			return e.queue.length > 0 && e.queue[0].action === "stop" ? this.queue = e.queue.slice(1) : this.queue = e.queue.concat(this.queue)
+			if (e.queue.length > 0 && e.queue[0].action === "stop") {
+				return this.queue = e.queue.slice(1);
+			} else {
+				return this.queue = e.queue.concat(this.queue);
+			}
 		};
 		r.prototype.pushObjectToLog = function (e) {
 			if (this.keepTrackOfEvents) return this.roundLog.objects.push(e)

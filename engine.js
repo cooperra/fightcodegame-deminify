@@ -250,7 +250,17 @@ FightCodeEngine.create_fight = function () {
 		e.prototype.containingCollisionAngle = function (e) {
 			var t;
 			t = this.minRadius;
-			return this.position.x - t <= e.upperLeft.x ? 270 : this.position.x + t >= e.lowerRight.x ? 90 : this.position.y - t <= e.upperLeft.y ? 360 : this.position.y + t >= e.lowerRight.y ? 180 : false;
+			if (this.position.x - t <= e.upperLeft.x) {
+				return 270;
+			} else if (this.position.x + t >= e.lowerRight.x) {
+				return 90;
+			} else if (this.position.y - t <= e.upperLeft.y) {
+				return 360;
+			} else if (this.position.y + t >= e.lowerRight.y) {
+				return 180;
+			} else {
+				return false;
+			}
 		};
 		e.prototype.intersects = function (e) {
 			var t, n, r, i, s;

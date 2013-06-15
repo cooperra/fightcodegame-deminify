@@ -296,7 +296,7 @@ FightCodeEngine.create_fight = function () {
 			n = Math.max.apply(Math, o);
 			s = Math.min.apply(Math, u);
 			r = Math.max.apply(Math, u);
-			return i <= r && n >= r ? true : s <= n && r >= n ? true : false;
+			return (i <= r && n >= r) || (s <= n && r >= n);
 		};
 		e.prototype.generateScalar = function (e, t) {
 			var n;

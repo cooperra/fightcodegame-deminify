@@ -476,7 +476,7 @@ FightCodeEngine.create_fight = function () {
 			if (this.queue.length > 0 && this.queue[0].started) return this.queue.shift()
 		};
 		r.prototype.runItem = function () {
-			var t, r, item, s, u;
+			var t, dir, item, s, u;
 			this.gunCoolDownTime > 0 && this.gunCoolDownTime--;
 			item = this.queue.shift();
 			u = false;
@@ -503,8 +503,8 @@ FightCodeEngine.create_fight = function () {
 			}
 			if (!item) return;
 			"count" in item && (item.started = true, item.count--, item.count > 0 && this.queue.unshift(item));
-			r = 1;
-			item.direction && item.direction < 0 && (r = -1);
+			dir = 1;
+			item.direction && item.direction < 0 && (dir = -1);
 			this.previousPosition = null;
 			this.previousAngle = null;
 			this.previousCannonAngle = null;
@@ -512,16 +512,16 @@ FightCodeEngine.create_fight = function () {
 			case "move":
 				s = this.rectangle.angle * Math.PI / 180;
 				this.previousPosition = new h(this.rectangle.position);
-				this.rectangle.incPosition(Math.cos(s) * o * r, Math.sin(s) * o * r);
+				this.rectangle.incPosition(Math.cos(s) * o * dir, Math.sin(s) * o * dir);
 				break;
 			case "rotateCannon":
 				this.previousCannonAngle = this.cannonAngle;
-				this.cannonAngle += e * r;
+				this.cannonAngle += e * dir;
 				this.cannonAngle = d(this.cannonAngle);
 				break;
 			case "turn":
 				this.previousAngle = this.rectangle.angle;
-				t = this.previousAngle + e * r;
+				t = this.previousAngle + e * dir;
 				this.rectangle.setAngle(t);
 				break;
 			case "fire":

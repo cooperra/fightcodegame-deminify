@@ -463,7 +463,11 @@ FightCodeEngine.create_fight = function () {
 			e.robotStatus.bulletsHit += 1;
 			if (!this.isAlive()) {
 				this.deathIdx = r.deathOrder++;
-				return e.robotStatus.parentStatus === this || (t = e.robotStatus, __indexOf.call(this.clones, t) >= 0) ? e.robotStatus.friendsKilled += 1 : e.robotStatus.enemiesKilled += 1;
+				if (e.robotStatus.parentStatus === this || (t = e.robotStatus, __indexOf.call(this.clones, t) >= 0)) {
+					return e.robotStatus.friendsKilled += 1;
+				} else {
+					return e.robotStatus.enemiesKilled += 1;
+				}
 			}
 		};
 		r.prototype.rollbackAfterCollision = function () {

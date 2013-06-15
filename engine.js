@@ -809,19 +809,35 @@ FightCodeEngine.create_fight = function () {
 						cannonAngle: a.cannonAngle,
 						parentId: a.parentStatus && a.parentStatus.id
 					});
-					a.isIdle() && (e = new l(a), this.safeCall(a.robot.instance, "onIdle", {
-						robot: e
-					}), a.updateQueue(e));
-					a.isInvisible && a.decInvisibleRounds();
+					if (a.isIdle()) {
+						e = new l(a);
+						this.safeCall(a.robot.instance, "onIdle", {
+							robot: e
+						});
+						a.updateQueue(e);
+					}
+					if (a.isInvisible) {
+						a.decInvisibleRounds();
+					}
 					r = a.runItem();
-					r && (this.robotsStatus.push(r), r instanceof c && (this.findEmptyPosition(r), this.pushEventToLog({
-						type: "cloned",
-						id: a.id,
-						cloneId: r.id
-					})));
+					if (r) {
+						this.robotsStatus.push(r);
+						if (r instanceof c) {
+							this.findEmptyPosition(r);
+							this.pushEventToLog({
+								type: "cloned",
+								id: a.id,
+								cloneId: r.id
+							});
+						}
+					}
 					e = this.checkCollision(a);
-					e && a.updateQueue(e);
-					a instanceof c && !a.isClone() && t++;
+					if (e) {
+						a.updateQueue(e);
+					}
+					if (a instanceof c && !a.isClone()) {
+						t++;
+					}
 				}
 				y = this.robotsStatus;
 				for (h = 0, v = y.length; h < v; h++) {
@@ -831,7 +847,9 @@ FightCodeEngine.create_fight = function () {
 					e = this.checkSight(a);
 					a.updateQueue(e);
 				}
-				this.roundLogCallback && this.roundLogCallback(this.roundLog)
+				if (this.roundLogCallback) {
+					this.roundLogCallback(this.roundLog);
+				}
 			}
 			s = this.robotsStatus.filter(function (e) {
 				return e instanceof c && !e.isClone()
@@ -840,7 +858,10 @@ FightCodeEngine.create_fight = function () {
 				var n, r;
 				return n = e.deathIdx ? e.deathIdx : e.life * 1e3, r = t.deathIdx ? t.deathIdx : t.life * 1e3, r - n
 			});
-			for (p = 0, m = o.length; p < m; p++) i = o[p], u = i.stats = i.stats();
+			for (p = 0, m = o.length; p < m; p++) {
+				i = o[p];
+				u = i.stats = i.stats();
+			}
 			return {
 				isDraw: this.isDraw(),
 				robots: o,
